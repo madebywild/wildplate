@@ -1,0 +1,11 @@
+body {
+  background: #ccc;
+}
+
+@custom-media --small-viewport (max-width: 800px);
+@media (--small-viewport) {
+  body {
+    background: $blue;
+    color: #fff;
+  }
+}
