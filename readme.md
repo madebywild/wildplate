@@ -9,7 +9,9 @@
 </p>
 
 <p align="center">
-  [![Twitter Follow](https://img.shields.io/twitter/follow/madebywild.svg?style=social&label=Follow&style=plastic)](https://twitter.com/madebywild)
+  <a href="https://twitter.com/madebywild">
+    <img alt="@madebywild" src="https://img.shields.io/twitter/follow/madebywild.svg?style=social&label=Follow&style=plastic">
+  </a>
 </p>
 
 Basically it leaves the gulp legacy behind and translates proven concepts to the webpack-era. To note here again: The goal is to be super easy to start while still being flexible, very asset-heavy and not really focused on data. If you want to create a rock-solid data-driven SPA, we suggest you to check out the [React Boilerplate](https://github.com/mxstbr/react-boilerplate) by our homie [Max Stoiber](https://github.com/mxstbr).
