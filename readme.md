@@ -21,7 +21,7 @@ Basically it leaves the gulp legacy behind and translates proven concepts to the
 Install the wildplate toolkit once globally (to make use of the CLI) with the package management tool of your choice.
 
 ```bash
-$ npm i -g wildplate
+$ npm install -g wildplate
 # or
 $ yarn global add wildplate
 ```
@@ -40,6 +40,15 @@ $ wildplate init
 
 What you might want to do in both cases is changing some configuration options in the `wildplate.js` file that has been created in the root directory of your project.
 
+## Update
+
+Updating seems super easy (`npm update -g wildplate`), but in reality the most reliable way is simply to uninstall and re-install `wildplate`.
+
+```bash
+$ npm uninstall -g wildplate
+$ npm install -g wildplate
+```
+
 ## Develop
 
 Run this dev command to start the development environment with hot module reloading (including the style).
@@ -48,7 +57,7 @@ Run this dev command to start the development environment with hot module reload
 $ wildplate start
 ```
 
-## Building
+## Build
 
 To build for deployment simply run the following, it will bundle and build everything into the `build` directory or according to the settings in the `wildplate.js` file.
 
