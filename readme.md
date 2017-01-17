@@ -18,10 +18,17 @@ Basically it leaves the gulp legacy behind and translates proven concepts to the
 
 ## Install
 
-Install the wildplate npm module locally and then use it's install script (locally is better for versioning). In most cases you should do this at the very beginning of your project, because this script will overwrite the versions of potentially already used modules in the `devDependencies` and `dependencies` sections in your `package.json`. So if you're integrating it into an old project, always make a backup of your `package.json`.
+Install the wildplate toolkit once globally (to make use of the CLI) with the package management tool of your choice.
 
 ```bash
-$ npm i --save wildplate
+$ npm i -g wildplate
+# or
+$ yarn global add wildplate
+```
+
+Then use it's install script in the working directory of your project. In most cases you should do this at the very beginning of your project, because this script will overwrite the versions of potentially already used modules in the `devDependencies` and `dependencies` sections in your `package.json`. So if you're integrating it into an old project, always make a backup of your `package.json`.
+
+```bash
 $ wildplate install
 ```
 
