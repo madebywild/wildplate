@@ -116,9 +116,26 @@ Favicons are automatically generated and injected along with their manifest info
 
 ### CSS Modules
 
-This boilerplate out of the box is configured to use [css-modules](https://github.com/css-modules/css-modules).
+This boilerplate out of the box is configured to use [css-modules](https://github.com/css-modules/css-modules). This allows you to use class names without having to worry about having used a particular name somewhere else in the project, since they get local scoped.
 
-All `.css` file extensions will use css-modules unless it has `.global.css`. If you need global styles, stylesheets with `.global.css` will not go through the css-modules loader. e.g. `app.global.css`
+```scss
+// Home.scss
+.hello {
+  color: blue;
+}
+```
+
+```javascript
+// Home.js
+import styles from './Home.scss';
+<div className={styles.hello}>Hello World!</div> // actual class will be something like: Home__hello___2iVKA
+```
+
+All `.scss` file extensions will use css-modules unless it has `.global.scss`. If you need global styles, stylesheets with `.global.scss` will not go through the css-modules loader. e.g. `app.global.scss`. This is especially useful for backwards compatibility, but don't forget to import them somewhere in your code!
+
+If you want to centralize things like variables or mixins, simply create a `.scss` file and import it inside other `.scss` files with the familiar syntax. This has the benefit that other developers see what is being imported and can figure out more easily where a certain variable or mixin is coming from.
+
+All `.css` files are simply included in the build without any transformation to ensure compatibility with styles from externals modules.
 
 ### New Features
 

@@ -42,6 +42,38 @@ function getVars() {
 }
 
 /**
+ * Centralized PostCSS options
+ * @type {Object}
+ */
+const postCssOptions = {
+  plugins: [
+    require('rucksack-css')({
+      responsiveType: true,
+      shorthandPosition: false,
+      quantityQueries: true,
+      alias: false,
+      inputPseudo: true,
+      clearFix: true,
+      fontPath: false,
+      hexRGBA: false,
+      easings: true,
+      fallbacks: true,
+      autoprefixer: true
+    }),
+    require('autoprefixer'),
+    require('laggard'),
+    require('postcss-font-magician')({
+      foundries: 'custom hosted bootstrap google',
+      hosted: [config.assets.fontDirectory, '/fonts']
+    }),
+    require('postcss-custom-media'),
+    require('postcss-media-minmax'),
+    require('postcss-custom-selectors'),
+    require('postcss-vertical-rhythm'),
+  ]
+}
+
+/**
  * Base Webpack Config to be "extended" from
  * @param  {Object} options webpack config options
  * @return {Object}         Valid webpack config
@@ -91,40 +123,29 @@ const baseWebpackConfig = (options) => ({
       test: /\.css$/,
       include: /node_modules/,
       loaders: ['style-loader', 'css-loader'],
-    }, {
-      test: /\.scss$/,
+    },
+    {
+      test: /\.global\.scss$/,
+      loaders: [
+        'style-loader?sourceMap',
+        'css-loader?sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+        {
+          loader: 'postcss-loader',
+          options: postCssOptions
+        },
+        'resolve-url-loader',
+        'sass-loader?sourceMap'
+      ]
+    },
+    {
+      test: /^((?!\.global).)*\.scss$/,
+      // test: /\.scss$/,
       loaders: [
         'style-loader?sourceMap',
         'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
         {
           loader: 'postcss-loader',
-          options: {
-            plugins: [
-              require('rucksack-css')({
-                responsiveType: true,
-                shorthandPosition: false,
-                quantityQueries: true,
-                alias: false,
-                inputPseudo: true,
-                clearFix: true,
-                fontPath: false,
-                hexRGBA: false,
-                easings: true,
-                fallbacks: true,
-                autoprefixer: true
-              }),
-              require('autoprefixer'),
-              require('laggard'),
-              require('postcss-font-magician')({
-                foundries: 'custom hosted bootstrap google',
-                hosted: [config.assets.fontDirectory, '/fonts']
-              }),
-              require('postcss-custom-media'),
-              require('postcss-media-minmax'),
-              require('postcss-custom-selectors'),
-              require('postcss-vertical-rhythm'),
-            ]
-          }
+          options: postCssOptions
         },
         'resolve-url-loader',
         'sass-loader?sourceMap'

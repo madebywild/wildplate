@@ -1,5 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
+import styles from './Home.scss';
 
 function App(props) {
   return (
@@ -11,7 +12,7 @@ function App(props) {
           { name: 'description', content: 'wildplate demo' },
         ]}
       />
-      <div>Hello World!</div>
+      <div className={styles.hello}>Hello World!</div>
     </div>
   );
 }
