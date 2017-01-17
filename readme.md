@@ -10,7 +10,6 @@
 
 <p align="center">
   [![Twitter Follow](https://img.shields.io/twitter/follow/madebywild.svg?style=social&label=Follow&style=plastic)](https://twitter.com/madebywild)
-  [![Beerpay](https://img.shields.io/beerpay/madebywild/wildplate.svg)](https://beerpay.io/madebywild/wildplate)
 </p>
 
 Basically it leaves the gulp legacy behind and translates proven concepts to the webpack-era. To note here again: The goal is to be super easy to start while still being flexible, very asset-heavy and not really focused on data. If you want to create a rock-solid data-driven SPA, we suggest you to check out the [React Boilerplate](https://github.com/mxstbr/react-boilerplate) by our homie [Max Stoiber](https://github.com/mxstbr).
@@ -42,7 +41,7 @@ $ wildplate start
 
 ## Building
 
-To build for deployment simply run the following, it will bundle and build everything into the `build` directory or according to the settings in the `wildplateConfig.js` file.
+To build for deployment simply run the following, it will bundle and build everything into the `build` directory or according to the settings in the `wildplate.js` file.
 
 ```bash
 $ wildplate build
@@ -58,7 +57,7 @@ $ wildplate start production
 
 ## Configuration
 
-Building microsites is never following rigid rules. So that you don't have to fuss around with the actual config files, there is one `wildplateConfig.js`-file in your root directory which you can set the most common wishes more easily. You'll find explanations of the options throughout this readme file and actual comments within the file.
+Building microsites is never following rigid rules. So that you don't have to fuss around with the actual config files, there is one `wildplate.js`-file in your root directory which you can set the most common wishes more easily. You'll find explanations of the options throughout this readme file and actual comments within the file.
 
 ## HTML
 
@@ -66,11 +65,11 @@ During compilation we use `app/index.html` (or whatever you specified in the con
 
 ## Javascript
 
-All sources are compiled, so go ahead and use all that `async/await` goodness. The entry point lives in `/app/app.js` (overrideable in the config), make sure to import everything you need in there! We'll transpile the code and errors don't exit the process [when encountering an error](https://github.com/webpack/docs/wiki/list-of-plugins#noerrorsplugin). All occurences of process.env.NODE_ENV are also replaced by the actual env-setting.
+All sources are compiled, so go ahead and use all that `async/await` goodness. The entry point lives in `/app/app.js` (overrideable in the config), make sure to import everything you need in there! We'll transpile the code and errors don't exit the process [when encountering an error](https://github.com/webpack/docs/wiki/list-of-plugins#noerrorsplugin). All occurences of `process.env.NODE_ENV` are also replaced by the actual env-setting.
 
 When importing `.json`-files you automatically [get an object](https://github.com/webpack/json-loader). Don't worry about requiring the same module over and over again, during compilation we dedupe modules anyway.
 
-If you use any 3rd party libraries which can't or won't be properly built with webpack, hit up the "externals" array with the module name in the javascript attribute in `wildplateConfig.js`. For example:
+If you use any 3rd party libraries which can't or won't be properly built with webpack, hit up the "externals" array with the module name in the javascript attribute in `wildplate.js`. For example:
 
 ```js
 externals: ['bootstrap']
@@ -78,7 +77,7 @@ externals: ['bootstrap']
 
 ## Images
 
-Whenever you need a static image (JP(E)G, PNG, GIF and SVG) from the asset-folder, import the image within the .js file where you want to use it first (this returns a path to the optimized image) and use it in your JSX. The image will automatically be optimized (lossy, but super tiny) during building, you don't have to provide optimized images. Through requiring all assets we can name them with a hash, which aids long-term caching and makes sure when we deploy the client sees the new assets (because of the new filename).
+Whenever you need a static image (JP(E)G, PNG, GIF and SVG), import the image within the .js file where you want to use it first (this returns a path to the optimized image) and use it in your JS(X). The image will automatically be optimized (lossy, but super tiny) during building, you don't have to provide optimized images. Through requiring all assets we can name them with a hash, which aids long-term caching and makes sure when we deploy the client sees the new assets (because of the new filename).
 
 ```javascript
 import logo from '../logo_small.png'; // yields path to the image
@@ -284,7 +283,7 @@ article h6 + p {
 
 #### Old Browsers
 
-[Autoprefixer](https://github.com/postcss/autoprefixer) is on-board automatically, nothing to prefix for you. Also we [take care](https://github.com/seaneking/laggard) of older browser by converting modern standards to things older browsers understand.
+[Autoprefixer](https://github.com/postcss/autoprefixer) is on-board automatically, nothing to prefix for you. Also we [take care](https://github.com/seaneking/laggard) of older browsers by converting modern standards to things older browsers understand.
 
 If you have to go further and have to support something like IE8, you might want to look at integrating [oldie](https://github.com/jonathantneal/oldie) to generate a second stylesheet just for those browsers ans use conditional includes. Because that shouldn't really happen anymore nowadays, this feature is not built-in.
 
@@ -300,17 +299,17 @@ require("file-loader?name=[name].[ext]!./app/.htaccess");
 ## Roadmap
 
 ### Near Future
-- [] DEFAULT APP: add react router
-- [] SERVER: add SSR with shared routes and code splitting
-- [] SERVER: add optional pre-render middleware with url config (super simple)
-- [] SERVER: add better management of API middleware for express (setting in config where to find the entry point that gets the app object supplied)
+- [ ] DEFAULT APP: add more advance react router example
+- [ ] SERVER: add SSR with shared routes and code splitting
+- [ ] SERVER: add optional pre-render middleware with url config (super simple)
+- [ ] SERVER: add better management of API middleware for express (setting in config where to find the entry point that gets the app object supplied)
 
 ### Discussion / Nice to have
-- [] DEFAULT APP: add mobx uiState best practice
-- [] CLI: add command to move wildplate-directory to cwd and make this override the ones inside the module for customization
-- [] DEFAULT APP: add optional Internationalization
-- [] DEPLOYMENT: add S3 capabilities either through AWS s3 sync cli or something like https://github.com/MikaAK/s3-plugin-webpack
-- [] CLI: replace minimist with questions to dynamically generate the config file
+- [ ] DEFAULT APP: add mobx uiState best practice
+- [ ] DEFAULT APP: add optional Internationalization
+- [ ] DEPLOYMENT: add S3 capabilities either through AWS s3 sync cli or something like https://github.com/MikaAK/s3-plugin-webpack
+- [ ] CLI: add command to move wildplate-directory to cwd and make this override the ones inside the module for customization
+- [ ] CLI: replace minimist with questions to dynamically generate the config file
 
 ## FAQ
 
