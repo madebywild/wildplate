@@ -208,7 +208,7 @@ class Cli {
       }
       // if we got till here, the file was not existing!
       cp(path.join(__dirname, 'config.js'), configFilePath);
-      this.log(`Finished installing config file ${em(constants.CONFIG_FILENAME)}.`);
+      this.log(`Finished installing config file ${em(constants.CONFIG_FILENAME)}. Unless you roll with the default app you probably want to customize it to your needs.`);
       return this.installDependencies();
     });
   }

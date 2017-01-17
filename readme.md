@@ -128,6 +128,19 @@ Using external font services like Typekit or Typography.com obviously is a no-br
 
 Favicons are automatically generated and injected along with their manifest information from `app/favicon.png` or whatever you specified in the config. So naturally try to make sure that png-file is bigger than the biggest favicon. Nifty!
 
+## JS / SCSS Variables
+
+With the out-of-the-box configuration (you can change this in the config under `variableFilePath`) the `app/vars.js` file exports an object with keys:
+
+```javascript
+module.exports = {
+  black: "#000",
+  blue: "blue"
+};
+```
+
+These centralized variables can be imported regularly by importing the js file wherever you need it, but most importantly are available automagically in your .scss files as well!
+
 ## Styling
 
 ### CSS Modules
