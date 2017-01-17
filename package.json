@@ -1,6 +1,6 @@
 {
   "name": "wildplate",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "An opinionated, modern post-gulp-era toolkit tailored for visual-heavy microsites and less for data-driven apps.",
   "main": "index.js",
   "repository": "https://github.com/madebywild/wildplate",
@@ -30,9 +30,7 @@
     "sanitize.css": "4.1.0",
     "shelljs": "^0.7.6",
     "warning": "3.0.0",
-    "whatwg-fetch": "1.0.0"
-  },
-  "devDependencies": {
+    "whatwg-fetch": "1.0.0",
     "autoprefixer": "^6.6.1",
     "babel-cli": "6.18.0",
     "babel-core": "6.18.0",
