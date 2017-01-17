@@ -4,9 +4,7 @@
   "description": "An opinionated, modern post-gulp-era toolkit tailored for visual-heavy microsites and less for data-driven apps.",
   "main": "index.js",
   "repository": "https://github.com/madebywild/wildplate",
-  "bin": {
-    "wildplate": "./src/cli.js"
-  },
+  "bin": "./src/cli.js",
   "author": "Thomas Strobl <thomas@thomas-strobl.com> (http://thomas-strobl.com/)",
   "license": "ISC",
   "dependencies": {
