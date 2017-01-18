@@ -157,11 +157,16 @@ const baseWebpackConfig = (options) => ({
     { test: /\.[ot]tf$/, loader: 'url?limit=65000&mimetype=application/octet-stream&name=fonts/[name].[ext]' },
     { test: /\.eot$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]' },
     {
-      test: /.*\.(gif|png|jpe?g|svg)$/i,
-      loaders: [
-        'file-loader',
-        'image-webpack-loader'
-      ]
+      // this makes svgs NOT inlineable
+      test: /\.img\.svg$/,
+      loaders: ['file-loader', 'image-webpack-loader']
+    }, {
+      // this makes svgs inlined per default
+      test: /^((?!\.img).)*\.svg$/,
+      loaders: ['svg-inline', 'image-webpack-loader']
+    }, {
+      test: /.*\.(gif|png|jpe?g)$/i,
+      loaders: ['file-loader', 'image-webpack-loader']
     }, {
       test: /\.html$/,
       loader: 'html-loader',

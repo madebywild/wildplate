@@ -102,6 +102,21 @@ import logo from '../logo_small.png'; // yields path to the image
 <img src={logo} />
 ```
 
+One special difference are SVG images. In 99% of the cases you want the flexibility of inlined SVGs (especially for animation). Import them regularly and use `svg-inline-react` for "mounting" it into JSX.
+
+```javascript
+import InlineSVG from 'svg-inline-react';
+import logo from '../logo.svg';
+<InlineSVG src={logo} />
+```
+
+In the unlikely case you need it to behave like other images inside an image tag, you can still do it, albeit you have to rename the SVG to end with an `.img.svg` extension (the actual file needs to have that extension, not only the import):
+
+```javascript
+import logo from '../logo.img.svg';
+<img src={logo} />
+```
+
 ## Audio & Video
 
 Audio and video files work exactly the same way that images work, but are not optimized. Instead, audio and video files that are smaller than 10000 bytes are inlined as data-url instead of copied to the build directory, all others are copied and the respective path yielded.
@@ -139,7 +154,7 @@ module.exports = {
 };
 ```
 
-These centralized variables can be imported regularly by importing the js file wherever you need it, but most importantly are available automagically in your .scss files as well!
+These centralized variables can be imported regularly by importing the js file wherever you need it, but most importantly are available automagically in your `.scss` files as well!
 
 ## Styling
 
@@ -343,21 +358,6 @@ If you have other files like let's say a `.htaccess`, simply require them somewh
 // file-loader ? name=the-destination-path ! the-source-path
 require("file-loader?name=[name].[ext]!./app/.htaccess");
 ```
-
-## Roadmap
-
-### Near Future
-- [ ] DEFAULT APP: add more advance react router example
-- [ ] SERVER: add SSR with shared routes and code splitting
-- [ ] SERVER: add optional pre-render middleware with url config (super simple)
-- [ ] SERVER: add better management of API middleware for express (setting in config where to find the entry point that gets the app object supplied)
-
-### Discussion / Nice to have
-- [ ] DEFAULT APP: add mobx uiState best practice
-- [ ] DEFAULT APP: add optional Internationalization
-- [ ] DEPLOYMENT: add S3 capabilities either through AWS s3 sync cli or something like https://github.com/MikaAK/s3-plugin-webpack
-- [ ] CLI: add command to move wildplate-directory to cwd and make this override the ones inside the module for customization
-- [ ] CLI: replace minimist with questions to dynamically generate the config file
 
 ## FAQ
 
