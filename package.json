@@ -1,6 +1,6 @@
 {
   "name": "wildplate",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "An opinionated, modern post-gulp-era toolkit tailored for visual-heavy microsites and less for data-driven apps.",
   "main": "index.js",
   "repository": "https://github.com/madebywild/wildplate",

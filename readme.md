@@ -367,5 +367,14 @@ While it does bring performance benefits during development, it complicates tool
 ### Why is install a seperate command?
 This has defensive reasons. Imagine you install `wildplate` into an existing project and it does all kinds of nasty things to existing code. We think you should be in control of what is happening. If we find out that it'd be useful, we might add it later.
 
+### When I try to import my images, I get an error: “ Library not loaded: /usr/local/opt/libpng/lib/libpng16.16.dylib”
+Sometimes you need to install `libpng` first on OSX:
+```bash
+# Install homebrew if you didn't already:
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+# Install libpng
+brew install libpng
+```
+
 ## License
 MIT © [Thomas Strobl](https://github.com/tom2strobl)

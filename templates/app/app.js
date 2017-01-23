@@ -9,10 +9,13 @@ import './global.scss';
 
 import Home from './components/Home.js';
 
+// defining Routes outside the render function kills issues with the router and hot reloading
+const routes = <Route path="/" component={Home}></Route>
+
 const render = () => {
   ReactDOM.render(
     <Router history={browserHistory}>
-      <Route path="/" component={Home}></Route>
+      {routes}
     </Router>,
     document.getElementById('app')
   );
