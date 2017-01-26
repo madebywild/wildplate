@@ -156,6 +156,8 @@ module.exports = {
 
 These centralized variables can be imported regularly by importing the js file wherever you need it, but most importantly are available automagically in your `.scss` files as well!
 
+Note that at the moment you always have to restart the `wildplate start` dev process after editing the vars file, we'll work on removing that restriction.
+
 ## Styling
 
 ### CSS Modules

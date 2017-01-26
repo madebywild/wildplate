@@ -46,7 +46,8 @@ function getVars() {
  * @type {Object}
  */
 const postCssOptions = {
-  plugins: [
+  ident: 'postcss',
+  plugins: () => { return [
     require('rucksack-css')({
       responsiveType: true,
       shorthandPosition: false,
@@ -62,15 +63,35 @@ const postCssOptions = {
     }),
     require('autoprefixer'),
     require('laggard'),
-    require('postcss-font-magician')({
-      foundries: 'custom hosted bootstrap google',
-      hosted: [config.assets.fontDirectory, '/fonts']
-    }),
+    // require('postcss-font-magician')({
+    //   foundries: 'custom hosted bootstrap google',
+    //   hosted: [config.assets.fontDirectory, '/fonts']
+    // }),
     require('postcss-custom-media'),
     require('postcss-media-minmax'),
     require('postcss-custom-selectors'),
     require('postcss-vertical-rhythm'),
-  ]
+  ] }
+}
+
+/**
+ * Centralized ImageOptim options
+ * @type {Object}
+ */
+const imageOptions = {
+  mozjpeg: {
+    quality: 80
+  },
+  pngquant:{
+    quality: "65-90",
+    speed: 4
+  },
+  svgo:{
+    plugins: [{removeViewBox: false}]
+  },
+  gifsicle:{
+    optimizationLevel: 3
+  }
 }
 
 /**
@@ -85,110 +106,169 @@ const baseWebpackConfig = (options) => ({
     publicPath: '/',
   }, options.output), // Merge with env dependent settings
   module: {
-    loaders: [{
-      test: /\.js$/, // Transform all .js files required somewhere with Babel
-      loader: 'babel-loader',
-      exclude: /node_modules/,
-      query: {
-        "presets": options.babelQuery.presets.concat([
-          [
-            "latest",
-            {
-              "es2015": {
-                "modules": false
+    rules: [
+      { // JAVASCRIPT
+        test: /\.js$/, // Transform all .js files required somewhere with Babel
+        exclude: /node_modules/,
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            "presets": options.babelQuery.presets.concat([
+              ["latest", { "es2015": { "modules": false } }],
+              "react",
+              "stage-0"
+            ]),
+            // TODO: this code block should actually be in the prod config further down this file
+            "env": {
+              "production": {
+                "only": [
+                  "app"
+                ],
+                // using compact here to have nifty if null shorthand for the boolean config
+                "plugins": _.compact([
+                  config.javascript.removeConsole ? "transform-remove-console" : null,
+                  "transform-react-remove-prop-types",
+                  "transform-react-constant-elements",
+                  "transform-react-inline-elements"
+                ])
               }
             }
-          ],
-          "react",
-          "stage-0"
-        ]),
-        // TODO: this code block should actually be in the prod config further down this file
-        "env": {
-          "production": {
-            "only": [
-              "app"
-            ],
-            // using compact here to have nifty if null shorthand for the boolean config
-            "plugins": _.compact([
-              config.javascript.removeConsole ? "transform-remove-console" : null,
-              "transform-react-remove-prop-types",
-              "transform-react-constant-elements",
-              "transform-react-inline-elements"
-            ])
           }
-        }
+        }],
+      },
+      { // REGULAR CSS - Do not transform vendor's CSS with CSS-modules The point is that they remain in global scope. Since we require these CSS files in our JS or CSS files, they will be a part of our compilation either way. So, no need for ExtractTextPlugin here.
+        test: /\.css$/,
+        include: /node_modules/,
+        use: [{
+          loader: 'style-loader'
+        }, {
+          loader:'css-loader'
+        }],
+      },
+      { // GLOBAL SCSS
+        test: /\.global\.scss$/,
+        use: [
+          {
+            loader: 'style-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              sourceMap: true,
+              modules: true,
+              localIdentName: '[name]__[local]___[hash:base64:5]'
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: postCssOptions
+          },
+          'resolve-url-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              data: getVars()
+            }
+          }
+        ]
+      },
+      { // SCSS MODULES
+        test: /^((?!\.global).)*\.scss$/,
+        use: [
+          {
+            loader: 'style-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              sourceMap: true,
+              modules: true,
+              localIdentName: '[name]__[local]___[hash:base64:5]'
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: postCssOptions
+          },
+          'resolve-url-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              data: getVars()
+            }
+          }
+        ]
+      },
+      // FONTS - we're omitting svgs as this could lead to issues with our svg loader
+      { test: /\.woff$/, loader: 'url-loader?limit=65000&mimetype=application/font-woff&name=fonts/[name].[ext]' },
+      { test: /\.woff2$/, loader: 'url-loader?limit=65000&mimetype=application/font-woff2&name=fonts/[name].[ext]' },
+      { test: /\.[ot]tf$/, loader: 'url-loader?limit=65000&mimetype=application/octet-stream&name=fonts/[name].[ext]' },
+      { test: /\.eot$/, loader: 'url-loader?limit=65000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]' },
+      // IMG SVG - this makes svgs NOT inlineable
+      {
+        test: /\.img\.svg$/,
+        use: [{
+          loader:'file-loader',
+          options: {
+            name: 'images/[name]-[hash].[ext]'
+          }
+        }, {
+          loader: 'image-webpack-loader',
+          options: imageOptions
+        }]
+      },
+      // INLINE SVG - this makes svgs inlined per default
+      {
+        test: /^((?!\.img).)*\.svg$/,
+        use: [{
+          loader: 'svg-inline'
+        }, {
+          loader: 'image-webpack-loader',
+          options: imageOptions
+        }]
+      },
+      // IMAGES
+      {
+        test: /.*\.(gif|png|jpe?g)$/i,
+        use: [{
+          loader:'file-loader',
+          options: {
+            name: 'images/[name]-[hash].[ext]'
+          }
+        }, {
+          loader: 'image-webpack-loader',
+          options: imageOptions
+        }]
+      },
+      // HTML
+      {
+        test: /\.html$/,
+        loader: 'html-loader',
+      },
+      // AUDIO & VIDEO
+      {
+        test: /\.(mp4|webm|mp3|wav|ogg)$/,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            name: 'media/[name]-[hash].[ext]'
+          }
+        }]
       }
-    }, {
-      // Do not transform vendor's CSS with CSS-modules The point is that they remain in global scope. Since we require these CSS files in our JS or CSS files, they will be a part of our compilation either way. So, no need for ExtractTextPlugin here.
-      test: /\.css$/,
-      include: /node_modules/,
-      loaders: ['style-loader', 'css-loader'],
-    },
-    {
-      test: /\.global\.scss$/,
-      loaders: [
-        'style-loader?sourceMap',
-        'css-loader?sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
-        {
-          loader: 'postcss-loader',
-          options: postCssOptions
-        },
-        'resolve-url-loader',
-        'sass-loader?sourceMap'
-      ]
-    },
-    {
-      test: /^((?!\.global).)*\.scss$/,
-      // test: /\.scss$/,
-      loaders: [
-        'style-loader?sourceMap',
-        'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
-        {
-          loader: 'postcss-loader',
-          options: postCssOptions
-        },
-        'resolve-url-loader',
-        'sass-loader?sourceMap'
-      ]
-    },
-    // { test: /\.svg$/, loader: 'url?limit=65000&mimetype=image/svg+xml&name=fonts/[name].[ext]' }, // this could lead to issues with our svg loader
-    { test: /\.woff$/, loader: 'url?limit=65000&mimetype=application/font-woff&name=fonts/[name].[ext]' },
-    { test: /\.woff2$/, loader: 'url?limit=65000&mimetype=application/font-woff2&name=fonts/[name].[ext]' },
-    { test: /\.[ot]tf$/, loader: 'url?limit=65000&mimetype=application/octet-stream&name=fonts/[name].[ext]' },
-    { test: /\.eot$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]' },
-    {
-      // this makes svgs NOT inlineable
-      test: /\.img\.svg$/,
-      loaders: ['file-loader', 'image-webpack-loader']
-    }, {
-      // this makes svgs inlined per default
-      test: /^((?!\.img).)*\.svg$/,
-      loaders: ['svg-inline', 'image-webpack-loader']
-    }, {
-      test: /.*\.(gif|png|jpe?g)$/i,
-      loaders: ['file-loader', 'image-webpack-loader']
-    }, {
-      test: /\.html$/,
-      loader: 'html-loader',
-    }, {
-      test: /\.json$/,
-      loader: 'json-loader',
-    }, {
-      test: /\.(mp4|webm|mp3|wav|ogg)$/,
-      loader: 'url-loader?limit=10000',
-    }],
+    ],
   },
   plugins: options.plugins.concat([
-    new webpack.ProvidePlugin({
-      // make fetch available
-      fetch: 'exports?self.fetch!whatwg-fetch',
-    }),
-    // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV` inside your code for any environment checks; UglifyJS will automatically drop any unreachable code.
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      },
-    }),
     new webpack.NamedModulesPlugin(),
   ]),
   resolve: {
@@ -196,43 +276,12 @@ const baseWebpackConfig = (options) => ({
     extensions: [
       '.js',
       '.jsx',
-      '.react.js',
     ],
     mainFields: [
       'browser',
       'jsnext:main',
       'main',
     ],
-  },
-  postcss: function () {
-    return [
-      require('rucksack-css'),
-      require('autoprefixer'),
-      require('laggard'),
-      require('postcss-font-magician'),
-      require('postcss-custom-media'),
-      require('postcss-media-minmax'),
-      require('postcss-custom-selectors'),
-      require('postcss-vertical-rhythm'),
-    ];
-  },
-  imageWebpackLoader: {
-    mozjpeg: {
-      quality: 80
-    },
-    pngquant:{
-      quality: "65-90",
-      speed: 4
-    },
-    svgo:{
-      plugins: [{removeViewBox: false}]
-    },
-    gifsicle:{
-      optimizationLevel: 3
-    }
-  },
-  sassLoader: {
-    data: getVars()
   },
   externals: config.javascript.externals,
   devtool: options.devtool,
@@ -266,7 +315,7 @@ const devWebpackConfig = baseWebpackConfig({
       async: true,
     }),
     new webpack.HotModuleReplacementPlugin(), // Tell webpack we want hot reloading
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({
       template: config.html.templatePath,
       inject: true, // Inject all files that are generated by webpack, e.g. bundle.js
@@ -317,13 +366,6 @@ const prodWebpackConfig = baseWebpackConfig({
       minChunks: 2,
       async: true,
     }),
-
-    // https://webpack.github.io/docs/list-of-plugins.html#occurrenceorderplugin
-    // https://github.com/webpack/webpack/issues/864
-    new webpack.optimize.OccurrenceOrderPlugin(),
-
-    // Merge all duplicate modules
-    new webpack.optimize.DedupePlugin(),
 
     // dynamically create favicons if enabled in the config
     config.assets.favicons ? new FaviconsWebpackPlugin({
