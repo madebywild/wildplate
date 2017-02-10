@@ -14,6 +14,8 @@ module.exports = {
     "productionPort": 8081,
     // the name directory you want the built files to end up at
     "outputDirectory": path.resolve(process.cwd(), 'build'),
+    // the base path you want to inject paths into the html from (only on build), eg. if it is "./", then the path to the js file in the html will be: "./xxx.js"
+    "outputPath": './',
     // the title of your app
     "title": "wildplate Default App",
     // whether or not we should open up a new tab in the browser in development when starting the dev server

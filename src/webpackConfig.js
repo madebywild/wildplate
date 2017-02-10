@@ -102,8 +102,7 @@ const imageOptions = {
 const baseWebpackConfig = (options) => ({
   entry: options.entry,
   output: Object.assign({
-    path: config.general.outputDirectory,
-    publicPath: '/',
+    path: config.general.outputDirectory
   }, options.output), // Merge with env dependent settings
   module: {
     rules: [
@@ -231,7 +230,7 @@ const baseWebpackConfig = (options) => ({
       {
         test: /^((?!\.img).)*\.svg$/,
         use: [{
-          loader: 'svg-inline'
+          loader: 'svg-inline-loader'
         }, {
           loader: 'image-webpack-loader',
           options: imageOptions
@@ -355,6 +354,7 @@ const prodWebpackConfig = baseWebpackConfig({
   output: {
     filename: '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].chunk.js',
+    publicPath: config.general.outputPath,
   },
 
   // Add production only webpack plugins

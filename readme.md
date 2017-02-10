@@ -16,6 +16,8 @@
 
 Basically it leaves the gulp legacy behind and translates proven concepts to the webpack-era. To note here again: The goal is to be super easy to start while still being flexible, very asset-heavy and not really focused on data. If you want to create a rock-solid data-driven SPA, we suggest you to check out the [React Boilerplate](https://github.com/mxstbr/react-boilerplate) by our homie [Max Stoiber](https://github.com/mxstbr).
 
+***
+
 ## Install
 
 Install the wildplate toolkit once globally (to make use of the CLI) with the package management tool of your choice.
@@ -72,6 +74,8 @@ For your convenience there's a simple express-server to serve your application b
 ```bash
 $ wildplate start production
 ```
+
+***
 
 ## Configuration
 
@@ -187,7 +191,8 @@ All `.css` files are simply included in the build without any transformation to 
 
 Thanks to Post-CSS we have some new tools to work with. You don't have to configure anything to use them. But at the same time you don't have to use them at all!
 
-#### Typography
+<details>
+<summary><strong>Typography</strong></summary>
 
 We'll automatically convert the fonts to data-urls and inject them into the css to save http requests and make things less complicated. Note that this could in some cases lead to issues in IE8, but who cares nowadays.
 
@@ -223,7 +228,10 @@ p {
 }
 ```
 
-#### Quantity Pseudo-Selectors
+</details>
+
+<details>
+<summary><strong>Quantity Pseudo-Selectors</strong></summary>
 
 Select and style elements based on their quantity.
 
@@ -246,7 +254,10 @@ li:exactly(4) {
 }
 ```
 
-#### Cross-Browser Input Pseudo-Elements
+</details>
+
+<details>
+<summary><strong>Cross-Browser Input Pseudo-Elements</strong></summary>
 
 Style placeholders with the `::placeholder` pseudo-element. It can be applied to any input element, or at the root of your stylesheet for global styling. Style the notoriously tricky range input with `::track` and `::thumb`. Track targets the ‘line’, while thumb targets the ‘button’. They can be applied to any range element, or at the root of your stylesheet for global styling. The -webkit-appearance: none; and -moz-appearance: none; declarations are added to relevant elements so that your custom styles are properly applied. Note that this means that for webkit (Chrome, etc) you must style both ::track and ::thumb, since the appearance must be set on the root element.
 
@@ -266,7 +277,10 @@ input[type="range"]::thumb {
 }
 ```
 
-#### Clearfix
+</details>
+
+<details>
+<summary><strong>Clearfix</strong></summary>
 
 A ‘clearfix’ is a method of making a parent element self-clear it’s children, so floats are contained. Two new methods are added, fix and fix-legacy. Both achieve the same outcome, with different levels of browser support. fix outputs cleaner code and is all that is needed for IE8+, fix-legacy support IE6/7.
 
@@ -279,7 +293,10 @@ A ‘clearfix’ is a method of making a parent element self-clear it’s childr
 }
 ```
 
-#### Proper Easings
+</details>
+
+<details>
+<summary><strong>Proper Easings</strong></summary>
 
 The new easings are translated to cubic-bezier() functions on output that CSS can natively understand. You can use: `ease-in-sine, ease-out-sine, ease-in-out-sine, ease-in-quad, ease-out-quad, ease-in-out-quad, ease-in-cubic, ease-out-cubic, ease-in-out-cubic, ease-in-quart, ease-out-quart, ease-in-out-quart, ease-in-quint, ease-out-quint, ease-in-out-quint, ease-in-expo, ease-out-expo, ease-in-out-expo, ease-in-circ, ease-out-circ, ease-in-out-circ, ease-in-back, ease-out-back, ease-in-out-back`
 
@@ -289,7 +306,10 @@ The new easings are translated to cubic-bezier() functions on output that CSS ca
 }
 ```
 
-#### Media Queries
+</details>
+
+<details>
+<summary><strong>Media Queries</strong></summary>
 
 You can write custom media queries!
 
@@ -324,7 +344,10 @@ You will get:
 }
 ```
 
-#### Custom selectors
+</details>
+
+<details>
+<summary><strong>Custom selectors</strong></summary>
 
 You can go overboard and invent new custom selectors which might aid development speed in some cases.
 
@@ -346,11 +369,16 @@ article h6 + p {
 }
 ```
 
-#### Old Browsers
+</details>
+
+<details>
+<summary><strong>Old Browsers</strong></summary>
 
 [Autoprefixer](https://github.com/postcss/autoprefixer) is on-board automatically, nothing to prefix for you. Also we [take care](https://github.com/seaneking/laggard) of older browsers by converting modern standards to things older browsers understand.
 
 If you have to go further and have to support something like IE8, you might want to look at integrating [oldie](https://github.com/jonathantneal/oldie) to generate a second stylesheet just for those browsers ans use conditional includes. Because that shouldn't really happen anymore nowadays, this feature is not built-in.
+
+</details>
 
 ## Other files
 
@@ -360,6 +388,8 @@ If you have other files like let's say a `.htaccess`, simply require them somewh
 // file-loader ? name=the-destination-path ! the-source-path
 require("file-loader?name=[name].[ext]!./app/.htaccess");
 ```
+
+***
 
 ## FAQ
 
