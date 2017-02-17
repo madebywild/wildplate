@@ -272,6 +272,7 @@ const baseWebpackConfig = (options) => ({
   ]),
   resolve: {
     modules: ['app', 'node_modules'],
+    alias: config.javascript.alias,
     extensions: [
       '.js',
       '.jsx',

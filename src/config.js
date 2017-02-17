@@ -30,6 +30,8 @@ module.exports = {
     "entryPoint": path.join(process.cwd(), 'app/app.js'),
     // If you use any 3rd party libraries which can't or won't be properly built with webpack, hit up the "externals" array with the module name
     "externals": [],
+    // If you want to use webpacks alias feature eg: { TweenLite: 'gsap', CSSPlugin: 'gsap/src/uncompressed/plugins/CSSPlugin' }
+    "alias": {},
     // the path to a file that holds global variables that are automatically available to scss files aswell to have one shared space for sizes, colors and more
     "variableFilePath": path.join(process.cwd(), "app/vars.js"),
     // whether or not to remove all console statements on the production build
