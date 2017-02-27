@@ -23,7 +23,13 @@ module.exports = {
   },
   "html": {
     // the path to an html file that is used as a template for later injecting all compiled files
-    "templatePath": 'app/index.html'
+    "templatePath": 'app/index.html',
+    // whether or not we should pre-render the SPA for SEO reasons
+    "preRender": false,
+    // the routes (array like ['/', '/about']) to pre-render
+    "preRenderRoutes": ["/"],
+    // false means we don't use it, otherwise use a string of the event you manually fire, eg.: document.dispatchEvent(new Event('post-render'));
+    "preRenderEvent": false
   },
   "javascript": {
     // the entry point for all your scripts, you should import/require everything from there

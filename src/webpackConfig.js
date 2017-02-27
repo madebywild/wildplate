@@ -11,6 +11,8 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const WebpackBrowserPlugin = require('webpack-browser-plugin');
+const PrerenderSpaPlugin = require('prerender-spa-plugin');
+// const NpmInstallPlugin = require('npm-install-webpack-plugin');
 // swiss army knife
 const _ = require('lodash/core');
 // load constants
@@ -63,10 +65,6 @@ const postCssOptions = {
     }),
     require('autoprefixer'),
     require('laggard'),
-    // require('postcss-font-magician')({
-    //   foundries: 'custom hosted bootstrap google',
-    //   hosted: [config.assets.fontDirectory, '/fonts']
-    // }),
     require('postcss-custom-media'),
     require('postcss-media-minmax'),
     require('postcss-custom-selectors'),
@@ -208,11 +206,11 @@ const baseWebpackConfig = (options) => ({
           }
         ]
       },
-      // FONTS - we're omitting svgs as this could lead to issues with our svg loader
-      { test: /\.woff$/, loader: 'url-loader?limit=65000&mimetype=application/font-woff&name=fonts/[name].[ext]' },
-      { test: /\.woff2$/, loader: 'url-loader?limit=65000&mimetype=application/font-woff2&name=fonts/[name].[ext]' },
-      { test: /\.[ot]tf$/, loader: 'url-loader?limit=65000&mimetype=application/octet-stream&name=fonts/[name].[ext]' },
-      { test: /\.eot$/, loader: 'url-loader?limit=65000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]' },
+      // FONTS - we're omitting svgs as this could lead to issues with our svg loader - the limit is currently set to a ridiculous low to make sure the SPA prerendering works. It did throw up when it encountered the big sausage from data-url'ed-fonts
+      { test: /\.woff$/, loader: 'url-loader?limit=100&mimetype=application/font-woff&name=fonts/[name].[ext]' },
+      { test: /\.woff2$/, loader: 'url-loader?limit=100&mimetype=application/font-woff2&name=fonts/[name].[ext]' },
+      { test: /\.[ot]tf$/, loader: 'url-loader?limit=100&mimetype=application/octet-stream&name=fonts/[name].[ext]' },
+      { test: /\.eot$/, loader: 'url-loader?limit=100&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]' },
       // IMG SVG - this makes svgs NOT inlineable
       {
         test: /\.img\.svg$/,
@@ -308,6 +306,11 @@ const devWebpackConfig = baseWebpackConfig({
 
   // Add development plugins (using compact here as we drop in a null for boolean config options)
   plugins: _.compact([
+    // new NpmInstallPlugin({
+    //   dev: false, // Use --save or --save-dev
+    //   peerDependencies: true, // Install missing peerDependencies
+    //   quiet: true, // Reduce amount of console logging
+    // }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       children: true,
@@ -359,7 +362,7 @@ const prodWebpackConfig = baseWebpackConfig({
   },
 
   // Add production only webpack plugins
-  plugins: [
+  plugins: _.compact([
     // creates extra chunks with common modules shared
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -418,9 +421,24 @@ const prodWebpackConfig = baseWebpackConfig({
         minifyCSS: true,
         minifyURLs: true,
       },
-      inject: true,
-    })
-  ],
+      // Ensure asynchronous chucnks are injected into <head> (needed for SPA pre-rendering)
+      inject: 'head',
+      // Ensure chunks are evaluated in correct order (needed for SPA pre-rendering)
+      chunksSortMode: 'dependency'
+    }),
+
+    // pre-render the app for SEO and sharing reasons
+    config.html.preRender ? new PrerenderSpaPlugin(
+      // Absolute path to compiled SPA
+      config.general.outputDirectory,
+      // List of routes to prerender
+      config.html.preRenderRoutes,
+      // Options
+      {
+        captureAfterDocumentEvent: config.html.preRenderEvent,
+      }
+    ) : null
+  ]),
 
   // In case we want special presets for production
   babelQuery: {

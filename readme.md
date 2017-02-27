@@ -85,6 +85,17 @@ Building microsites is never following rigid rules. So that you don't have to fu
 
 During compilation we use `app/index.html` (or whatever you specified in the config) as the template for our index file, we then automatically inject all assets, styles and scripts as they are used. If you need some external stuff (like a Typekit or Google Analytics Snippet), just throw it into your html-template.
 
+In the `wildplate.js` file you have the option to make wildplate render your app and write the rendered version into the built index.html file. This is useful for using `React Helmet` for writing your `<head>` statements but still showing them on first load for eg. social sharing or SEO purposes. You can optionally define an event you manually fire when the site has completely load to ensure correct rendering. If you name your event 'post-render':
+
+```javascript
+document.addEventListener('DOMContentLoaded', function () {
+  render();
+  document.dispatchEvent(new Event('post-render'));
+});
+```
+
+For every route you specify, a `index.html` file will be created in your outputPath. eg. "/": build/index.html, "/about": build/about/index.html.
+
 ## Javascript
 
 All sources are compiled, so go ahead and use all that `async/await` goodness. The entry point lives in `/app/app.js` (overrideable in the config), make sure to import everything you need in there! We'll transpile the code and errors don't exit the process [when encountering an error](https://github.com/webpack/docs/wiki/list-of-plugins#noerrorsplugin). All occurences of `process.env.NODE_ENV` are also replaced by the actual env-setting.
