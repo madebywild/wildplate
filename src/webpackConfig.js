@@ -12,6 +12,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const WebpackBrowserPlugin = require('webpack-browser-plugin');
 const PrerenderSpaPlugin = require('prerender-spa-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 // const NpmInstallPlugin = require('npm-install-webpack-plugin');
 // swiss army knife
 const _ = require('lodash/core');
@@ -262,12 +263,32 @@ const baseWebpackConfig = (options) => ({
             name: 'media/[name]-[hash].[ext]'
           }
         }]
+      },
+      // SHADER
+      {
+        test: /\.glsl$/,
+        use: [{
+          loader: 'webpack-glsl'
+        }]
       }
     ],
   },
-  plugins: options.plugins.concat([
+  // context: config.assets.context,
+  plugins: options.plugins.concat(_.compact([
+    // depending on the config copies a static folder over
+    config.assets.copyStatic ? new CopyWebpackPlugin([{
+      from: config.assets.staticFolder,
+      // from: 'app/static',
+      to: '.'
+      // from: {
+      //   glob: config.assets.staticFolder,
+      //   dot: true
+      // },
+      // to: config.general.outputDirectory
+    }]) : null,
+    // always name modules
     new webpack.NamedModulesPlugin(),
-  ]),
+  ])),
   resolve: {
     modules: ['app', 'node_modules'],
     alias: config.javascript.alias,
@@ -363,6 +384,7 @@ const prodWebpackConfig = baseWebpackConfig({
 
   // Add production only webpack plugins
   plugins: _.compact([
+
     // creates extra chunks with common modules shared
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

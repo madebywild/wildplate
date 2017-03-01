@@ -154,6 +154,20 @@ Using external font services like Typekit or Typography.com obviously is a no-br
 }
 ```
 
+## Shaders
+
+You can import shaders as `.glsl` files just like any other source:
+
+```javascript
+var shader = require('../glsl/fragment.glsl');
+```
+
+Note that inside your shaders you can import other shaders with a SCSS-like syntax:
+
+```scss
+@import ./includes/perlin-noise;
+```
+
 ## Favicons
 
 Favicons are automatically generated and injected along with their manifest information from `app/favicon.png` or whatever you specified in the config. So naturally try to make sure that png-file is bigger than the biggest favicon. Nifty!
@@ -172,6 +186,10 @@ module.exports = {
 These centralized variables can be imported regularly by importing the js file wherever you need it, but most importantly are available automagically in your `.scss` files as well!
 
 Note that at the moment you always have to restart the `wildplate start` dev process after editing the vars file, we'll work on removing that restriction.
+
+## Static Files
+
+If you have a bunch of static files (like google site verification, sitemap.xml etc.) you can make use of the copying feature by enabling it in your `wildplate.js` config file. Simply set `assets.copyStatic` to `true` and optionally provide a custom source path, otherwise it picks up files at `app/static` and copies them to the output directory.
 
 ## Styling
 
