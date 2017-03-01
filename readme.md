@@ -25,6 +25,7 @@ Some feats:
 - [X] Automated Favicon generation
 - [X] Shader loading
 - [X] JS/SCSS shared variables
+- [X] Full Asset Revisioning upon change
 
 ***
 
