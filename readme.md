@@ -16,6 +16,15 @@
 
 Basically it leaves the gulp legacy behind and translates proven concepts to the webpack-era. To note here again: The goal is to be super easy to start while still being flexible, very asset-heavy and not really focused on data. If you want to create a rock-solid data-driven SPA, we suggest you to check out the [React Boilerplate](https://github.com/mxstbr/react-boilerplate) by our homie [Max Stoiber](https://github.com/mxstbr).
 
+Some feats:
+- [X] Future JS transpilation including async/await and ES7 static class properties
+- [X] Hot Reloading
+- [X] (S)CSS Modules
+- [X] Pre-Rendering as compilation step for SEO/Sharing visibility of static site without server
+- [X] Image Minification on the fly
+- [X] Automated Favicon generation
+- [X] Shader loading
+
 ***
 
 ## Install
