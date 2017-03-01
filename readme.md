@@ -19,11 +19,12 @@ Basically it leaves the gulp legacy behind and translates proven concepts to the
 Some feats:
 - [X] Future JS transpilation including async/await and ES7 static class properties
 - [X] Hot Reloading
-- [X] (S)CSS Modules
+- [X] SCSS Modules
 - [X] Pre-Rendering as compilation step for SEO/Sharing visibility of static site without server
 - [X] Image Minification on the fly
 - [X] Automated Favicon generation
 - [X] Shader loading
+- [X] JS/SCSS shared variables
 
 ***
 
