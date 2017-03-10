@@ -45,7 +45,7 @@ module.exports = {
   },
   "assets": {
     // if we should copy a static folder to the build directory
-    copyStatic: true,
+    copyStatic: false,
     // the path from your project root, don't use process.cwd() or globs here, just the relative path to your source static folder
     staticFolder: 'app/static',
     // whether or not we should automatically generate favicons from one source image
