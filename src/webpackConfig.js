@@ -336,6 +336,20 @@ const devWebpackConfig = baseWebpackConfig({
 
   // Add development plugins (using compact here as we drop in a null for boolean config options)
   plugins: _.compact([
+    // fix for moment js
+    new webpack.ContextReplacementPlugin(/^\.\/locale$/, context => {
+      // check if the context was created inside the moment package
+      if (!/\/moment\//.test(context.context)) { return }
+      // context needs to be modified in place
+      Object.assign(context, {
+        // include only japanese, korean and chinese variants all tests are prefixed with './' so this must be part of the regExp
+        // the default regExp includes everything; /^$/ could be used to include nothing
+        // regExp: /^\.\/(ja|ko|zh)/,
+        // regExp: /^$/,
+          // point to the locale data folder relative to moment/src/lib/locale
+        request: '../../locale'
+      })
+    }),
     // new NpmInstallPlugin({
     //   dev: false, // Use --save or --save-dev
     //   peerDependencies: true, // Install missing peerDependencies

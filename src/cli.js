@@ -160,8 +160,8 @@ class Cli {
     }
     // first clean the build dir
     this.cleanBuildDir();
-    // now run the build
-    if (exec(`NODE_ENV=production webpack --config ${path.join(__dirname, 'webpackConfig.js')} --color -p --progress`).code !== 0) {
+    // now run the build (using the absolute path here instead of just `webpack` to make sure it runs for people that dont have the local node_modules dir added to their path)
+    if (exec(`NODE_ENV=production ./node_modules/webpack/bin/webpack.js --config ${path.join(__dirname, 'webpackConfig.js')} --color -p --progress`).code !== 0) {
       return this.log(`Build failed`, 'error');
     } else {
       return this.log(`Build completed at ${em(this.config.general.outputDirectory)}.`);
