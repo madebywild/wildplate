@@ -149,14 +149,14 @@ const baseWebpackConfig = (options) => ({
           {
             loader: 'style-loader',
             options: {
-              sourceMap: true
+              // sourceMap: true  // currently disabled due to bug of loader resolving relative urls
             }
           },
           {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              sourceMap: true,
+              // sourceMap: true, // currently disabled due to bug of loader resolving relative urls
               modules: true,
               localIdentName: '[name]__[local]___[hash:base64:5]'
             }
@@ -169,7 +169,7 @@ const baseWebpackConfig = (options) => ({
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true,
+              // sourceMap: true, // currently disabled due to bug of loader resolving relative urls
               data: getVars()
             }
           }
@@ -181,14 +181,14 @@ const baseWebpackConfig = (options) => ({
           {
             loader: 'style-loader',
             options: {
-              sourceMap: true
+              // sourceMap: true // currently disabled due to bug of loader resolving relative urls
             }
           },
           {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              sourceMap: true,
+              // sourceMap: true, // currently disabled due to bug of loader resolving relative urls
               modules: true,
               localIdentName: '[name]__[local]___[hash:base64:5]'
             }
@@ -201,7 +201,7 @@ const baseWebpackConfig = (options) => ({
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true,
+              // sourceMap: true, // currently disabled due to bug of loader resolving relative urls
               data: getVars()
             }
           }
@@ -483,7 +483,8 @@ const prodWebpackConfig = baseWebpackConfig({
         minifyURLs: true,
       },
       // Ensure asynchronous chucnks are injected into <head> (needed for SPA pre-rendering)
-      inject: 'head',
+      // inject: config.html.preRender ? 'head' : 'body', // investigate why head suddnely doesn't work anymore
+      inject: 'body',
       // Ensure chunks are evaluated in correct order (needed for SPA pre-rendering)
       chunksSortMode: 'dependency'
     }),

@@ -127,6 +127,11 @@ class Cli {
   }
 
   /**
+   * TODO: add eject() function here that moves this src folder to the cwd()
+   * then on start and build check for local files with a naming convention
+   */
+
+  /**
    * Starts the server script depending on the chosen environment
    * @param  {String} env Desired environment
    * @return {Log} Returns log of the current operation
