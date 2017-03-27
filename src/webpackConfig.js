@@ -321,6 +321,7 @@ const devWebpackConfig = baseWebpackConfig({
   output: {
     filename: '[name].js',
     chunkFilename: '[name].chunk.js',
+    publicPath: config.general.outputPath
   },
 
   // add environment specific loaders
@@ -402,7 +403,7 @@ const prodWebpackConfig = baseWebpackConfig({
   output: {
     filename: '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].chunk.js',
-    publicPath: config.general.outputPath,
+    publicPath: config.general.outputPath
   },
 
   // add environment specific loaders
